@@ -1,23 +1,19 @@
+//basic server stuff
 const express = require('express')
 const breads = express.Router()
+//added our bread models!
 const Bread = require('../models/bread.js')
 
 // INDEX
 breads.get('/', (req, res) => {
-    res.render('Index',
-        {
-            breads: Bread
-        }
-    )
-    // res.send(Bread)
+    //now our homepage is all the breads...served fresh!
+    res.send(Bread)
 })
-
-
-
 // SHOW
 breads.get('/:arrayIndex', (req, res) => {
-    //enables changing to display breads using url params
+    //takes our in-browser parameter and renders the bread we asked for!
     res.send(Bread[req.params.arrayIndex])
 })
+
 
 module.exports = breads
