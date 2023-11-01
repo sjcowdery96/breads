@@ -6,7 +6,12 @@ const Bread = require('../models/bread.js')
 
 // INDEX
 breads.get('/', (req, res) => {
-    res.render('index')
+    res.render('index',
+        //time to lay into those key value pairs bb..
+        {
+            breads: Bread
+        }
+    )
     // res.send(Bread)
 })
 
