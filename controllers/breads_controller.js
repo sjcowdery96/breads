@@ -6,12 +6,14 @@ const Bread = require('../models/bread.js')
 
 // INDEX
 breads.get('/', (req, res) => {
-    //now our homepage is all the breads...served fresh!
-    res.send(Bread)
+    res.render('index')
+    // res.send(Bread)
 })
+
+
 // SHOW
 breads.get('/:arrayIndex', (req, res) => {
-    //takes our in-browser parameter and renders the bread we asked for!
+    //takes our in-browser parameter and renders the bread we asked for! (remember, it indexes at 0!)
     res.send(Bread[req.params.arrayIndex])
 })
 
