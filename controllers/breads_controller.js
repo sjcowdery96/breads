@@ -9,7 +9,8 @@ breads.get('/', (req, res) => {
     res.render('index',
         //time to lay into those key value pairs bb..
         {
-            breads: Bread
+            breads: Bread,
+            title: 'Index Page'
         }
     )
     // res.send(Bread)

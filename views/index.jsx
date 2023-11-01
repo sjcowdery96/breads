@@ -1,10 +1,10 @@
 const React = require('react')
 const Default = require('./layouts/Default')
 
-function Index({ breads }) {
+function Index({ breads, title }) {
     return (
         //wrapping this particular view inside the default view we built already
-        <Default>
+        <Default title={title}>
             <h2>Index Page</h2>
             <ul>
                 {/* this is a comment in JSX?? wild.*/}
