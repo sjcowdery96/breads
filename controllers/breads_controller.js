@@ -42,6 +42,12 @@ breads.get('/new', (req, res) => {
     res.render('new')
 })
 
+// DELETE
+breads.delete('/:indexArray', (req, res) => {
+    Bread.splice(req.params.indexArray, 1)
+    res.status(303).redirect('/breads')
+})
+
 
 // SHOW
 //for moments when we are NOT on the homepage...render SHOW
@@ -50,7 +56,8 @@ breads.get('/:arrayIndex', (req, res) => {
         //takes our in-browser parameter and renders the bread we asked for! (remember, it indexes at 0!)
         res.render('Show', {
             //now we are actully RENDERING the array values using our "show" view
-            bread: Bread[req.params.arrayIndex]
+            bread: Bread[req.params.arrayIndex],
+            index: req.params.arrayIndex,
         })
         //else throw a 404 error...
     } else {
@@ -65,5 +72,16 @@ module.exports = breads
 
 /*
 
+// SHOW
+breads.get('/:arrayIndex', (req, res) => {
+  if (Bread[req.params.arrayIndex]) {
+    res.render('Show', {
+      bread:Bread[req.params.arrayIndex],
+      index: req.params.arrayIndex,
+    })
+  } else {
+    res.render('404')
+  }
+})
 
 */
