@@ -9,8 +9,8 @@ breads.get('/', (req, res) => {
     res.render('index',
         //time to lay into those key value and pass them in bb..
         {
-            breads: Bread,
-            title: 'Index Page'
+            breads: Bread, //sends the ENTIRE collection of models
+            title: 'Home Page'
         }
     )
     // res.send(Bread)
@@ -59,10 +59,11 @@ breads.delete('/:indexArray', (req, res) => {
 // SHOW
 //for moments when we are NOT on the homepage...render SHOW
 breads.get('/:arrayIndex', (req, res) => {
+    //if the arrayIndex we requested exists...render it
     if (Bread[req.params.arrayIndex]) {
         //takes our in-browser parameter and renders the bread we asked for! (remember, it indexes at 0!)
         res.render('Show', {
-            //now we are actully RENDERING the array values using our "show" view
+            //now we are actully RENDERING with the key values from our models using our "show" view
             bread: Bread[req.params.arrayIndex],
             index: req.params.arrayIndex,
         })
