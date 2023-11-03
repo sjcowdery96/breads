@@ -22,6 +22,6 @@ module.exports = [
     {
         name: 'Coffee',
         hasGluten: false,
-        image: './public/images/r2.jpg',
+        image: '/images/r2.jpg',
     }
 ]

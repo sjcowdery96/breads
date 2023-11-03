@@ -35,7 +35,7 @@ breads.post('/', (req, res) => {
         //gluten free people rejoice
         req.body.hasGluten = false
     }
-    //adds the new bread to the database
+    //adds the new bread to the models array
     Bread.push(req.body)
     //redirects us to breads page
     res.redirect('/breads')
