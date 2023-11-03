@@ -1,3 +1,4 @@
+//react framework for our base/default view layout
 const React = require('react')
 
 function Default(html) {
@@ -24,5 +25,5 @@ function Default(html) {
 }
 
 
-
+//export the dang thang!
 module.exports = Default

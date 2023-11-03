@@ -1,4 +1,5 @@
 const React = require('react')
+//remember that default react layout...well..this is where we use him!
 const Default = require('./layouts/Default')
 
 function Index({ breads, title }) {
