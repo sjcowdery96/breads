@@ -55,6 +55,29 @@ breads.delete('/:indexArray', (req, res) => {
     res.status(303).redirect('/breads')
 })
 
+// UPDATE
+breads.put('/:arrayIndex', (req, res) => {
+    if (req.body.hasGluten === 'on') {
+        //converting our HTML button input into boolean 
+        req.body.hasGluten = true
+    } else {
+        req.body.hasGluten = false
+    }
+    //makes the visited index of our bread array into the new request body ie. the "updated" bread
+    Bread[req.params.arrayIndex] = req.body
+    //redirects to this same page -- good as a refresh
+    res.redirect(`/breads/${req.params.arrayIndex}`)
+})
+
+// EDIT
+breads.get('/:indexArray/edit', (req, res) => {
+    res.render('edit', {
+        bread: Bread[req.params.indexArray],
+        index: req.params.indexArray
+    })
+})
+
+
 
 // SHOW
 //for moments when we are NOT on the homepage...render SHOW

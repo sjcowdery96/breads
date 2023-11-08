@@ -18,6 +18,8 @@ function Show({ bread, index }) {
             </p>
             {/* data below is using the passed in variables "bread" from the controller file */}
             <img src={bread.image} alt={bread.name} />
+            {/* added a button for editing the bread */}
+            <a href={`/breads/${index}/edit`}><button>Edit</button></a>
             {/* this form below is how we delete the bread displayed */}
             <form action={`/breads/${index}?_method=DELETE`} method="POST">
                 <input type='submit' value="DELETE" />
