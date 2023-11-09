@@ -15,7 +15,7 @@ function Index({ breads, title }) {
                         return (
                             <li key={index}>
                                 {/* because we linked each one via breads/[index] this will route to each one */}
-                                <a href={`/breads/${index}`}>
+                                <a href={`/breads/${bread.id}`}>
                                     {bread.name}
                                 </a>
                             </li>

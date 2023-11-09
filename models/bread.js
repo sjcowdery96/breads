@@ -1,3 +1,23 @@
+// require mongoose 
+const mongoose = require('mongoose')
+// creating shorthand for the Schema constructor 
+const { Schema } = mongoose
+
+// bread shcema in format we are familar with
+const breadSchema = new Schema({
+    name: { type: String, required: true },
+    hasGluten: Boolean,
+    image: { type: String, default: 'http://placehold.it/500x500.png' }
+})
+
+// creates the model for export 
+const Bread = mongoose.model('Bread', breadSchema)
+module.exports = Bread
+
+
+/*
+OLD CODE WITH THE OLD MODELS
+
 module.exports = [
     {
         name: 'Rye',
@@ -25,3 +45,4 @@ module.exports = [
         image: '/images/r2.jpg',
     }
 ]
+*/

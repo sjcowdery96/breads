@@ -4,28 +4,30 @@ const breads = express.Router()
 //added our bread models so we have that data to render on SHOW.
 const Bread = require('../models/bread.js')
 
+
 // INDEX
 breads.get('/', (req, res) => {
-    res.render('index',
-        //time to lay into those key value and pass them in bb..
-        {
-            breads: Bread, //sends the ENTIRE collection of models
-            title: 'Home Page'
-        }
-    )
-    // res.send(Bread)
+    Bread.find()
+        .then(foundBreads => {
+            res.render('index', {
+                breads: foundBreads,
+                title: 'Index Page'
+            })
+        })
 })
+
+
 
 // CREATE
 breads.post('/', (req, res) => {
     //added check functionality for inputs
-    //if no image provided, give a placeholder one
+    //if no image provided, assign to undefined -- mongo will fill it in
     if (!req.body.image) {
-        req.body.image = 'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'
+        req.body.image = undefined
     }
-    //if input is not a valid url, assign the placeholder
-    if (!req.body.image.startsWith("http") || !req.body.image.startsWith("https")) {
-        req.body.image = 'https://images.unsplash.com/photo-1517686469429-8bdb88b9f907?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80'
+    //if input is not empty, but also not a valid url, assign to undefined -- mongo will fill it in
+    else if (!req.body.image.startsWith("http") || !req.body.image.startsWith("https")) {
+        req.body.image = undefined
     }
     //this has to be "on" because the checkbox html element only has "on" and "off" states
     if (req.body.hasGluten === 'on') {
@@ -35,8 +37,8 @@ breads.post('/', (req, res) => {
         //gluten free people rejoice
         req.body.hasGluten = false
     }
-    //adds the new bread to the models array
-    Bread.push(req.body)
+    //adds the new bread to the models array using Mongoose! 
+    Bread.create(req.body)
     //redirects us to breads page
     res.redirect('/breads')
 })
@@ -81,19 +83,19 @@ breads.get('/:indexArray/edit', (req, res) => {
 
 // SHOW
 //for moments when we are NOT on the homepage...render SHOW
-breads.get('/:arrayIndex', (req, res) => {
-    //if the arrayIndex we requested exists...render it
-    if (Bread[req.params.arrayIndex]) {
-        //takes our in-browser parameter and renders the bread we asked for! (remember, it indexes at 0!)
-        res.render('Show', {
-            //now we are actully RENDERING with the key values from our models using our "show" view
-            bread: Bread[req.params.arrayIndex],
-            index: req.params.arrayIndex,
+breads.get('/:id', (req, res) => {
+    //uses the request params id to find the corresponding bread
+    Bread.findById(req.params.id)
+        //mongoose does its thing to find the bread in MongoDB
+        .then(foundBread => {
+            res.render('show', {
+                //because of our schema, we don't need to list out each key value pair
+                bread: foundBread
+            })
         })
-        //else throw a 404 error...
-    } else {
-        res.send('404')
-    }
+        .catch(err => {
+            res.send("whoopsidaysie 404")
+        })
 })
 
 
