@@ -50,15 +50,17 @@ breads.get('/new', (req, res) => {
 })
 
 // DELETE
-breads.delete('/:indexArray', (req, res) => {
-    //grabs the value of the array corresponding to our bread page and removes it
-    Bread.splice(req.params.indexArray, 1)
-    //sends a successful status code then redirects to home page
-    res.status(303).redirect('/breads')
+breads.delete('/:id', (req, res) => {
+    //since we have the ID in the request parameters, use that within Mongo to find and delete
+    Bread.findByIdAndDelete(req.params.id)
+        .then(deletedBread => {
+            //sends a successful status code then redirects to home page
+            res.status(303).redirect('/breads')
+        })
 })
 
 // UPDATE
-breads.put('/:arrayIndex', (req, res) => {
+breads.put('/:id', (req, res) => {
     if (req.body.hasGluten === 'on') {
         //converting our HTML button input into boolean 
         req.body.hasGluten = true
@@ -66,17 +68,27 @@ breads.put('/:arrayIndex', (req, res) => {
         req.body.hasGluten = false
     }
     //makes the visited index of our bread array into the new request body ie. the "updated" bread
-    Bread[req.params.arrayIndex] = req.body
-    //redirects to this same page -- good as a refresh
-    res.redirect(`/breads/${req.params.arrayIndex}`)
+    Bread.findByIdAndUpdate(req.params.id, req.body, { new: true })
+        .then(updatedBread => {
+            console.log(updatedBread)
+            //redirects to this same page -- good as a refresh
+            res.redirect(`/breads/${req.params.id}`)
+        })
+
+
 })
 
 // EDIT
-breads.get('/:indexArray/edit', (req, res) => {
-    res.render('edit', {
-        bread: Bread[req.params.indexArray],
-        index: req.params.indexArray
-    })
+breads.get('/:id/edit', (req, res) => {
+    //locates the correct bread in the database
+    Bread.findById(req.params.id)
+        //then maps that bish into the render
+        .then(foundBread => {
+            res.render('edit', {
+                bread: foundBread
+            })
+        })
+
 })
 
 
@@ -98,12 +110,48 @@ breads.get('/:id', (req, res) => {
         })
 })
 
+//SEED DATA
+breads.get('/data/seed', (req, res) => {
+    Bread.insertMany([
+        {
+            name: 'Rye',
+            hasGluten: true,
+            image: 'https://images.unsplash.com/photo-1595535873420-a599195b3f4a?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1050&q=80',
+        },
+        {
+            name: 'French',
+            hasGluten: true,
+            image: 'https://images.unsplash.com/photo-1534620808146-d33bb39128b2?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=634&q=80',
+        },
+        {
+            name: 'Gluten Free',
+            hasGluten: false,
+            image: 'https://images.unsplash.com/photo-1546538490-0fe0a8eba4e6?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80',
+        },
+        {
+            name: 'Pumpernickel',
+            hasGluten: true,
+            image: 'https://images.unsplash.com/photo-1586444248902-2f64eddc13df?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=1050&q=80',
+        }
+    ])
+        .then(createdBreads => {
+            res.redirect('/breads')
+        })
+})
+
+
 
 //this is where we are exporting our breads array
 module.exports = breads
 
 
 /*
+breads.delete('/:id', (req, res) => {
+  Bread.findByIdAndDelete(req.params.id) 
+    .then(deletedBread => { 
+      res.status(303).redirect('/breads')
+    })
+})
 
 
 */
