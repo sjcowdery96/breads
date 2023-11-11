@@ -6,6 +6,9 @@ function Show({ bread }) {
     return (
         <Default>
             <h3>{bread.name}</h3>
+            {/* data below is using the passed in variables "bread" from the controller file */}
+            <img src={bread.image} alt={bread.name} />
+            <p>{bread.getBakedBy()}</p>
             <p>
                 {/* so evidently...this logic below with ? and : is shorthand for "if" when displaying certain HTML data. Neato! */}
                 and it
@@ -16,8 +19,6 @@ function Show({ bread }) {
                 }
                 have gluten.
             </p>
-            {/* data below is using the passed in variables "bread" from the controller file */}
-            <img src={bread.image} alt={bread.name} />
             {/* added a button for editing the bread */}
             <a href={`/breads/${bread.id}/edit`}><button>Edit</button></a>
             {/* this form below is how we delete the bread displayed */}
