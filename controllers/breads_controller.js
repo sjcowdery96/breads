@@ -3,16 +3,21 @@ const express = require('express')
 const breads = express.Router()
 //added our bread models so we have that data to render on SHOW.
 const Bread = require('../models/bread.js')
+const Baker = require('../models/baker.js')
 
 
 // INDEX
 breads.get('/', (req, res) => {
-    Bread.find()
-        .then(foundBreads => {
-            res.render('index', {
-                breads: foundBreads,
-                title: 'Index Page'
-            })
+    Baker.find()
+        .then(foundBakers => {
+            Bread.find()
+                .then(foundBreads => {
+                    res.render('index', {
+                        breads: foundBreads,
+                        bakers: foundBakers,
+                        title: 'Index Page'
+                    })
+                })
         })
 })
 
@@ -43,11 +48,17 @@ breads.post('/', (req, res) => {
     res.redirect('/breads')
 })
 
-// NEW
+
+//NEW
 breads.get('/new', (req, res) => {
-    //renders the jsx file for new
-    res.render('new')
+    Baker.find()
+        .then(foundBakers => {
+            res.render('new', {
+                bakers: foundBakers
+            })
+        })
 })
+
 
 // DELETE
 breads.delete('/:id', (req, res) => {
@@ -80,16 +91,19 @@ breads.put('/:id', (req, res) => {
 
 // EDIT
 breads.get('/:id/edit', (req, res) => {
-    //locates the correct bread in the database
-    Bread.findById(req.params.id)
-        //then maps that bish into the render
-        .then(foundBread => {
-            res.render('edit', {
-                bread: foundBread
-            })
+    //now finds the baker first, then finds the bread from that baker
+    Baker.find()
+        .then(foundBakers => {
+            Bread.findById(req.params.id)
+                .then(foundBread => {
+                    res.render('edit', {
+                        bread: foundBread,
+                        bakers: foundBakers
+                    })
+                })
         })
-
 })
+
 
 
 
@@ -98,6 +112,8 @@ breads.get('/:id/edit', (req, res) => {
 breads.get('/:id', (req, res) => {
     //uses the request params id to find the corresponding bread
     Bread.findById(req.params.id)
+        //referencees the parent Schema
+        .populate('baker')
         //mongoose does its thing to find the bread in MongoDB
         .then(foundBread => {
             res.render('show', {

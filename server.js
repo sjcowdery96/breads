@@ -41,6 +41,16 @@ const breadsController = require('./controllers/breads_controller.js')
 //uses the controller on the /breads path
 app.use('/breads', breadsController)
 
+// Bakers
+//instantiates the controller for the app from our local filepath
+const bakersController = require('./controllers/bakers_controller.js')
+app.use('/bakers', bakersController)
+
+// 404 Page
+app.get('*', (req, res) => {
+    res.send('404')
+})
+
 // 404 Page
 //if any other file path happens...throw a 404 error and insult the user
 app.get('*', (req, res) => {
