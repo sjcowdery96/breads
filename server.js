@@ -30,9 +30,9 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 
 
 // ROUTES
+//our homepage is defined here with the home page jsx file
 app.get('/', (req, res) => {
-    //this is the text you will see on our base root page "/"
-    res.send('Welcome to an Awesome App about Breads!')
+    res.render('home')
 })
 
 // Breads

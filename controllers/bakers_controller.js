@@ -13,7 +13,9 @@ baker.get('/data/seed', (req, res) => {
 // Index: 
 baker.get('/', (req, res) => {
     Baker.find()
-        .populate('breads')
+        .populate("breads")
+        //cant test this method below until we have display data for breads baked linked 
+        //.populate({ path: 'breads', options: { limit: 2 } })
         .then(foundBakers => {
             res.send(foundBakers)
         })
@@ -27,6 +29,14 @@ baker.get('/:id', (req, res) => {
             res.render('bakerShow', {
                 baker: foundBaker
             })
+        })
+})
+//DELETE
+baker.delete('/:id', (req, res) => {
+    //uses the Mongoose native functions to find and destroy
+    Baker.findByIdAndDelete(req.params.id)
+        .then(deletedBaker => {
+            res.status(303).redirect('/breads')
         })
 })
 

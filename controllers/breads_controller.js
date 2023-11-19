@@ -7,7 +7,20 @@ const Baker = require('../models/baker.js')
 
 
 // INDEX
-breads.get('/', (req, res) => {
+//cleaner await code 
+breads.get('/', async (req, res) => {
+    //make it...LEEEEEEEEEEAAAAAAAANN
+    const foundBakers = await Baker.find()
+    const foundBreads = await Bread.find()
+    res.render('index', {
+        breads: foundBreads,
+        bakers: foundBakers,
+        title: 'Index Page'
+    })
+})
+
+
+/*
     Baker.find()
         .then(foundBakers => {
             Bread.find()
@@ -19,7 +32,7 @@ breads.get('/', (req, res) => {
                     })
                 })
         })
-})
+*/
 
 
 
@@ -113,7 +126,7 @@ breads.get('/:id', (req, res) => {
     //uses the request params id to find the corresponding bread
     Bread.findById(req.params.id)
         //referencees the parent Schema
-        .populate('baker')
+        .populate({ path: 'baker', options: { limit: 2 } })
         //mongoose does its thing to find the bread in MongoDB
         .then(foundBread => {
             res.render('show', {

@@ -21,8 +21,6 @@ breadSchema.methods.getBakedBy = function () {
 }
 
 
-
-
 // creates the model for export 
 const Bread = mongoose.model('Bread', breadSchema)
 module.exports = Bread

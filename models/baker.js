@@ -16,17 +16,29 @@ const bakerSchema = new Schema({
         required: true
     },
     bio: String
+    //below ensures all the virtuals are JSON
 }, { toJSON: { virtuals: true } })
 
 // At the top with your dependencies: 
 
 
 // Virtuals:
-//baker "parent" schema will need these virtuals
+//baker schema can now use "breads" to call Breads.baker
 bakerSchema.virtual('breads', {
     ref: 'Bread',
     localField: '_id',
     foreignField: 'baker'
+})
+
+
+//Hooks...
+bakerSchema.post('findOneAndDelete', function () {
+    //litstening for the findOneAndDelete method
+    //deletes ALL breads matching this baker ID
+    Bread.deleteMany({ baker: this._conditions._id })
+        .then(deleteStatus => {
+            console.log(deleteStatus)
+        })
 })
 
 
