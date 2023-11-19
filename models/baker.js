@@ -23,7 +23,7 @@ const bakerSchema = new Schema({
 
 
 // Virtuals:
-//baker schema can now use "breads" to call Breads.baker
+//baker schema can now use "breads" to call baker.breads
 bakerSchema.virtual('breads', {
     ref: 'Bread',
     localField: '_id',
